@@ -1,0 +1,155 @@
+﻿<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-danger">
+            <h4 class="card-title ">{{'GamerList'| translate}}</h4>
+            <a *ngIf="checkClaim('CreateGamerCommand')" class="pull-right" data-toggle="modal" data-target="#gamer"> <i style="color:white"  title="{{'Add'| translate}}" class="far fa-plus-square fa-2x"></i></a>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              
+              <div class="col-md-4 pull-right">
+                <mat-form-field>
+                  <mat-label>Filter</mat-label>
+                  <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                </mat-form-field>
+              </div>
+							<table mat-table [dataSource]="dataSource" matSort>
+
+
+								
+                   <ng-container matColumnDef="id">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'Id'|translate}}</th>
+                     <td mat-cell *matCellDef="let element">{{element.id}}</td>
+				   </ng-container>
+	
+                   <ng-container matColumnDef="firstName">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'FirstName'|translate}}</th>
+                     <td mat-cell *matCellDef="let element">{{element.firstName}}</td>
+				   </ng-container>
+	
+                   <ng-container matColumnDef="lastName">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'LastName'|translate}}</th>
+                     <td mat-cell *matCellDef="let element">{{element.lastName}}</td>
+				   </ng-container>
+	
+                   <ng-container matColumnDef="birthYear">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'BirthYear'|translate}}</th>
+                     <td mat-cell *matCellDef="let element">{{element.birthYear}}</td>
+				   </ng-container>
+	
+                   <ng-container matColumnDef="identityNumber">
+                     <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'IdentityNumber'|translate}}</th>
+                     <td mat-cell *matCellDef="let element">{{element.identityNumber}}</td>
+				   </ng-container>
+
+
+
+
+								<ng-container matColumnDef="update" >
+                  <th mat-header-cell *matHeaderCellDef></th>
+                  <td style="width: 25px;" mat-cell
+                    *matCellDef="let element">
+                    <a *ngIf="checkClaim('UpdateGamerCommand')" data-toggle="modal" data-target="#gamer"  (click)="getGamerById(element.id)">
+                      <i title="{{'Update'| translate}}" style="color:#ff5722;" class="far fa-edit"></i>
+                    </a>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="delete" >
+                  <th mat-header-cell *matHeaderCellDef></th>
+                  <td  style="width: 25px;" mat-cell
+                    *matCellDef="let element">
+                    <a *ngIf="checkClaim('DeleteGamerCommand')" (confirm)="deleteGamer(element.id)" [swal]="deleteSwal"><i title="{{'Delete'| translate}}" style="color: #D9534E;"class="fas fa-trash-alt"></i></a>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <tr class="mat-row" *matNoDataRow style="text-align: center;">
+                  <td class="mat-cell" colspan="4">{{'NoRecordsFound' |translate}} "{{input.value}}"</td>
+                </tr>
+							</table>
+							<mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+							</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal modal-angular fade" id="gamer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          (click)="clearFormGroup(gamerAddForm)"><span aria-hidden="true">&times;</span></button>
+        <h4 class="margin-top">
+           {{'GamerForm'| translate}}
+        </h4>
+        <div class="separator"></div>
+        <form *ngIf="gamerAddForm" [formGroup]="gamerAddForm" (ngSubmit)="save()">
+          
+					<div class="row">
+            <div class="col col-md-12">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="firstName" type="text" id="firstName" name="firstName"
+                       formControlName="firstName" />
+                <div class="alert alert-danger"
+                     *ngIf="gamerAddForm.get('firstName')!.hasError('firstName') && gamerAddForm.get('firstName')!.dirty">
+                </div>
+              </mat-form-field>
+            </div>
+          </div>
+					<div class="row">
+            <div class="col col-md-12">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="lastName" type="text" id="lastName" name="lastName"
+                       formControlName="lastName" />
+                <div class="alert alert-danger"
+                     *ngIf="gamerAddForm.get('lastName')!.hasError('lastName') && gamerAddForm.get('lastName')!.dirty">
+                </div>
+              </mat-form-field>
+            </div>
+          </div>
+					<div class="row">
+            <div class="col col-md-12">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="birthYear" type="text" id="birthYear" name="birthYear"
+                       formControlName="birthYear" />
+                <div class="alert alert-danger"
+                     *ngIf="gamerAddForm.get('birthYear')!.hasError('birthYear') && gamerAddForm.get('birthYear')!.dirty">
+                </div>
+              </mat-form-field>
+            </div>
+          </div>
+					<div class="row">
+            <div class="col col-md-12">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="identityNumber" type="text" id="identityNumber" name="identityNumber"
+                       formControlName="identityNumber" />
+                <div class="alert alert-danger"
+                     *ngIf="gamerAddForm.get('identityNumber')!.hasError('identityNumber') && gamerAddForm.get('identityNumber')!.dirty">
+                </div>
+              </mat-form-field>
+            </div>
+          </div>
+                   
+          <button mat-raised-button type="submit" class="btn btn-danger pull-right">{{'Save'|translate}}</button>
+          <div class="clearfix"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<swal #deleteSwal title="{{'DeleteConfirm' | translate}}" icon = "error" [showCancelButton]="true"
+	[confirmButtonText] = "'OK'"[cancelButtonText] = "'Cancel'" >
+</swal>
+

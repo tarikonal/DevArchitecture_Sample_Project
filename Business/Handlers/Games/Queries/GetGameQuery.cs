@@ -1,0 +1,38 @@
+﻿
+using Business.BusinessAspects;
+using Core.Utilities.Results;
+using DataAccess.Abstract;
+using Entities.Concrete;
+using MediatR;
+using System.Threading;
+using System.Threading.Tasks;
+using Core.Aspects.Autofac.Logging;
+using Core.CrossCuttingConcerns.Logging.Serilog.Loggers;
+
+
+namespace Business.Handlers.Games.Queries
+{
+    public class GetGameQuery : IRequest<IDataResult<Game>>
+    {
+        public int Id { get; set; }
+
+        public class GetGameQueryHandler : IRequestHandler<GetGameQuery, IDataResult<Game>>
+        {
+            private readonly IGameRepository _gameRepository;
+            private readonly IMediator _mediator;
+
+            public GetGameQueryHandler(IGameRepository gameRepository, IMediator mediator)
+            {
+                _gameRepository = gameRepository;
+                _mediator = mediator;
+            }
+            [LogAspect(typeof(FileLogger))]
+            [SecuredOperation(Priority = 1)]
+            public async Task<IDataResult<Game>> Handle(GetGameQuery request, CancellationToken cancellationToken)
+            {
+                var game = await _gameRepository.GetAsync(p => p.Id == request.Id);
+                return new SuccessDataResult<Game>(game);
+            }
+        }
+    }
+}
