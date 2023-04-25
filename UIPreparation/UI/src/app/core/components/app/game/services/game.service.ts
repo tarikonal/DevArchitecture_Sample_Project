@@ -1,9 +1,9 @@
-﻿import { HttpClient } from '@angular/common/http';
+﻿import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Game } from '../models/Game';
-import { environment } from 'environments/environment';
-
+import { environment } from '../../../../../../environments/environment';
+import { LookUp } from 'app/core/models/lookUp';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class GameService {
 
   getGameList(): Observable<Game[]> {
 
-    return this.httpClient.get<Game[]>(environment.getApiUrl + '/games/getall')
+    return this.httpClient.get<Game[]>(environment.getApiUrl + '/games/')
   }
 
   getGameById(id: number): Observable<Game> {

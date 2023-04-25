@@ -43,7 +43,7 @@ namespace WebAPI.Controllers
         [HttpGet("lookups")]
         public async Task<IActionResult> GetUserLookup()
         {
-            return GetResponseOnlyResultData(await Mediator.Send(new GetUserLookupQuery()));
+            return GetResponseOnlyResultData(await Mediator.Send(new GetGameLookupQuery()));
         }
 
         /// <summary>
