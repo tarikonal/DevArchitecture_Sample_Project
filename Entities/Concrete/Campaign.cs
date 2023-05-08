@@ -15,6 +15,7 @@ namespace Entities.Concrete
         public int DiscountRate { get; set; }
 
         [ForeignKey("Game")]
-        public int GameId { get; set; }
+        public int? GameId { get; set; }
+        public Game Game { get; set; }  
     }
 }

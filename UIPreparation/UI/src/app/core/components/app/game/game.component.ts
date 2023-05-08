@@ -7,7 +7,7 @@ import { AlertifyService } from 'app/core/services/alertify.service';
 import { LookUpService } from 'app/core/services/lookUp.service';
 import { AuthService } from 'app/core/components/admin/login/services/auth.service';
 import { Game } from './models/Game';
-import { GameService } from './services/Game.service';
+import { GameService } from './services/game.service';
 import { environment } from 'environments/environment';
 
 declare var jQuery: any;
@@ -36,6 +36,7 @@ export class GameComponent implements AfterViewInit, OnInit {
 
     ngAfterViewInit(): void {
         this.getGameList();
+		this.getGameListDto();
     }
 
 	ngOnInit() {
@@ -43,6 +44,14 @@ export class GameComponent implements AfterViewInit, OnInit {
 		this.createGameAddForm();
 	}
 
+
+	getGameListDto() {
+		this.gameService.getGameListDto().subscribe(data => {
+			this.gameList = data;
+			this.dataSource = new MatTableDataSource(data);
+			this.configDataTable();
+		});
+	}
 
 	getGameList() {
 		this.gameService.getGameList().subscribe(data => {

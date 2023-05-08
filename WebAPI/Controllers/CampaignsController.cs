@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Entities.Concrete;
 using System.Collections.Generic;
+using Business.Handlers.Games.Queries;
+using Core.Entities.Concrete;
 
 namespace WebAPI.Controllers
 {
@@ -36,6 +38,19 @@ namespace WebAPI.Controllers
             }
             return BadRequest(result.Message);
         }
+
+
+
+        [Produces("application/json", "text/plain")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Translate>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(string))]
+        [HttpGet("dtos")]
+        public async Task<IActionResult> GetGameListDto()
+        {
+            return GetResponseOnlyResultData(await Mediator.Send(new GetGamesListDtoQuery()));
+        }
+
+
 
         ///<summary>
         ///It brings the details according to its id.

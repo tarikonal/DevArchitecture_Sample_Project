@@ -13,6 +13,11 @@ export class GameService {
   constructor(private httpClient: HttpClient) { }
 
 
+  getGameListDto(): Observable<Game[]> {
+
+    return this.httpClient.get<Game[]>(environment.getApiUrl + '/games/dtos')
+  }
+
   getGameList(): Observable<Game[]> {
 
     return this.httpClient.get<Game[]>(environment.getApiUrl + '/games/')

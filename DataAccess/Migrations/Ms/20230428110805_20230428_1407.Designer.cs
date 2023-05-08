@@ -4,6 +4,7 @@ using DataAccess.Concrete.EntityFramework.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations.Ms
 {
     [DbContext(typeof(MsDbContext))]
-    partial class MsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230428110805_20230428_1407")]
+    partial class _202304281407
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1276,7 +1279,7 @@ namespace DataAccess.Migrations.Ms
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("GameId")
+                    b.Property<int>("GameId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -1288,8 +1291,7 @@ namespace DataAccess.Migrations.Ms
                     b.HasKey("Id");
 
                     b.HasIndex("GameId")
-                        .IsUnique()
-                        .HasFilter("[GameId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Campaigns");
                 });
@@ -1345,7 +1347,9 @@ namespace DataAccess.Migrations.Ms
                 {
                     b.HasOne("Entities.Concrete.Game", "Game")
                         .WithOne("Campaign")
-                        .HasForeignKey("Entities.Concrete.Campaign", "GameId");
+                        .HasForeignKey("Entities.Concrete.Campaign", "GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Game");
                 });
